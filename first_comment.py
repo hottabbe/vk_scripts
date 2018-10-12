@@ -54,7 +54,7 @@ if type(group_id) is not str:
         comments_ = []
         while True:
             text = input('==>')
-            if len(text) != 0:
+            if len(text) == 0:
                 with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'r', encoding='utf-8') as file:
                     new = file.read().replace("comments = ['Пахом пидор']", 'comments = %s' % str(comments_))
                 with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'w', encoding='utf-8') as file:
