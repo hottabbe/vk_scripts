@@ -1,13 +1,14 @@
 # vkscripts
 # Fcomment
 # Оставляет "первонахи" в любом паблике
-# 0.1
+# 0.11
 ###
 
 import vk
 import sys
 import random
 import time
+import os
 
 group_id = ''
 comments = []
@@ -55,16 +56,17 @@ if type(group_id) is not str:
             while True:
                 comments_.append(input('==>'))
         except KeyboardInterrupt:
-            with open('first_comment.py', 'r', encoding='utf-8') as file:
+            with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'r', encoding='utf-8') as file:
                 new = file.read().replace("comments = ['Пахом пидор']", 'comments = %s' % str(comments_))
-            with open('first_comment.py', 'w', encoding='utf-8') as file:
+            with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'w', encoding='utf-8') as file:
                 file.write(new)
             sys.exit(0)
 else:
     print('Группа не заполнена\n'
           'Вводите id группы и нажмите Enter')
-    with open('first_comment.py', 'r', encoding='utf-8') as file:
+    print(os.path.dirname(os.path.abspath(__file__)))
+    with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'r', encoding='utf-8') as file:
         new = file.read().replace('group_id = \'\'', 'group_id = %s' % input('==>'))
-    with open('first_comment.py', 'w', encoding='utf-8') as file:
+    with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'w', encoding='utf-8') as file:
         file.write(new)
     sys.exit(0)
