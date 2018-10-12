@@ -1,7 +1,7 @@
 # vkscripts
 # Fcomment
 # Оставляет "первонахи" в любом паблике
-# 0.11
+# 0.12
 ###
 
 import vk
@@ -50,17 +50,18 @@ if type(group_id) is not str:
     else:
         print('Комментарии не заполнены\n'
               'Вводите комментарии и нажимайте Enter\n'
-              'Когда закончите - нажмите ctrl + c')
+              'Когда закончите - нажмите Enter еще раз')
         comments_ = []
-        try:
-            while True:
-                comments_.append(input('==>'))
-        except KeyboardInterrupt:
-            with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'r', encoding='utf-8') as file:
-                new = file.read().replace("comments = ['Пахом пидор']", 'comments = %s' % str(comments_))
-            with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'w', encoding='utf-8') as file:
-                file.write(new)
-            sys.exit(0)
+        while True:
+            text = input('==>')
+            if len(text) != 0:
+                with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'r', encoding='utf-8') as file:
+                    new = file.read().replace("comments = ['Пахом пидор']", 'comments = %s' % str(comments_))
+                with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'w', encoding='utf-8') as file:
+                    file.write(new)
+                sys.exit(0)
+            else:
+                comments_.append(text)
 else:
     print('Группа не заполнена\n'
           'Вводите id группы и нажмите Enter')
