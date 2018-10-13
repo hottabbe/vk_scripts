@@ -1,59 +1,71 @@
 # vkscripts
 # Fcomment
 # Оставляет "первонахи" в любом паблике
-# 0.215
+# 0.3
 ###
 
-import vk
-import sys
-import random
-import time
 import os
-import threading
+import random
+import sys
+import time
+
+import vk
 
 group_id = []
 comments = []
 threads = []
+_api_ = []
 
 
-def idle(group):
-    isClear = False
-    try:
-        post = api.wall.get(owner_id='-%s' % group, count=1)['items'][0]['id']
-    except IndexError:
-        if not isClear:
-            print('Стена пустая,жду постов...')
-        isClear = True
-        post = 0
-    print('Запущено ожидание постов в группе id%s' % group)
-    while True:
+def api():
+    _appids_ = [5821493, 6063579, 6063581, 6063639, 6477148]
+    if len(_api_) == 0:
+        __data__ = [input('Введите логин от ВК: '), input('Введите пароль от ВК: ')]
+        print('Для обхода ограничений ВК на запросы сделаем несколько авторизаций\n'
+              'Не пугайтесь, все норм :)')
+        time.sleep(1)
+        for _id_ in _appids_:
+            print('Авторизация #%i' % (len(_api_) + 1))
+            _api_.append(
+                vk.API(
+                    vk.AuthSession(app_id=_id_, user_login=__data__[0], user_password=__data__[1], scope='groups,wall'),
+                    lang='ru', v='5.85'))
+            _api_[len(_api_) - 1].stats.trackVisitor()
+    else:
+        return random.choice(_api_)
+
+
+def idle():
+    post = {}
+    last_post = {}
+    for group in group_id:
         try:
-            last_post = api.wall.get(owner_id='-%s' % group, count=1)['items'][0]['id']
-            if post != last_post:
-                api.wall.createComment(owner_id='-%s' % group, post_id=last_post, message=random.choice(comments))
-                print('https://vk.com/wall-%s_%s - Есть комментарий' % (group, last_post))
-            post = last_post
-            time.sleep(0.7)
-        except KeyboardInterrupt:
-            sys.exit(0)
+            post[group] = api().wall.get(owner_id='-%s' % group, count=1)['items'][0]['id']
         except IndexError:
-            if not isClear:
-                print('Стена пустая,жду постов...')
-            isClear = True
+            print('Стена пустая,жду постов...')
+            post[group] = 0
+        print('Запущено ожидание постов в группе id%s' % group)
+    time.sleep(1)
+    while True:
+        for group in group_id:
+            try:
+                last_post[group] = api().wall.get(owner_id='-%s' % group, count=1)['items'][0]['id']
+                if post[group] != last_post[group]:
+                    api().wall.createComment(owner_id='-%s' % group, post_id=last_post[group],
+                                             message=random.choice(comments))
+                    print('https://vk.com/wall-%s_%s - Есть комментарий' % (group, last_post[group]))
+                post[group] = last_post[group]
+            except KeyboardInterrupt:
+                sys.exit(0)
+            except IndexError:
+                post[group] = 0
+            time.sleep(0.5)
 
 
 if len(group_id) > 0:
     if len(comments) > 0:
-        api = vk.API(
-            vk.AuthSession(app_id=5821493, user_login=input('login: '), user_password=input('password:'),
-                           scope='groups,wall'),
-            lang='ru', v='5.85')
-        api.stats.trackVisitor()
-        for group in group_id:
-            t = threading.Thread(target=idle, args=(group,))
-            t.start()
-            threads.append(t)
-            time.sleep(1)
+        api()
+        idle()
     else:
         print('Комментарии не заполнены\n'
               'Вводите комментарии и нажимайте Enter\n'
@@ -64,7 +76,7 @@ if len(group_id) > 0:
             if len(text) == 0:
                 with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'r',
                           encoding='utf-8') as file:
-                    new = file.read().replace("comments = []", 'comments = %s' % str(comments_))
+                    new = file.read().replace("comments = ['Пахом пидор']", 'comments = %s' % str(comments_))
                 with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'w',
                           encoding='utf-8') as file:
                     file.write(new)
@@ -81,7 +93,7 @@ else:
         if len(text) == 0:
             with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'r',
                       encoding='utf-8') as file:
-                new = file.read().replace("group_id = []", "group_id = %s" % str(groups))
+                new = file.read().replace("group_id = ['141913912', '168005476']", "group_id = %s" % str(groups))
             with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'w',
                       encoding='utf-8') as file:
                 file.write(new)
