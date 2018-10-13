@@ -11,8 +11,8 @@ import time
 
 import vk
 
-group_id = []
-comments = []
+group_id = [ ]
+comments = [ ]
 threads = []
 _api_ = []
 
@@ -76,7 +76,7 @@ if len(group_id) > 0:
             if len(text) == 0:
                 with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'r',
                           encoding='utf-8') as file:
-                    new = file.read().replace("comments = ['Пахом пидор']", 'comments = %s' % str(comments_))
+                    new = file.read().replace("comments = [ ]", 'comments = %s' % str(comments_))
                 with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'w',
                           encoding='utf-8') as file:
                     file.write(new)
@@ -93,7 +93,7 @@ else:
         if len(text) == 0:
             with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'r',
                       encoding='utf-8') as file:
-                new = file.read().replace("group_id = ['141913912', '168005476']", "group_id = %s" % str(groups))
+                new = file.read().replace("group_id = [ ]", "group_id = %s" % str(groups))
             with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'w',
                       encoding='utf-8') as file:
                 file.write(new)
