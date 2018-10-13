@@ -28,9 +28,9 @@ def idle(group):
     print('Запущено ожидание постов в группе id%s' % group)
     while True:
         try:
-            last_post = api.wall.get(owner_id='-%i' % group, count=1)['items'][0]['id']
+            last_post = api.wall.get(owner_id='-%s' % group, count=1)['items'][0]['id']
             if post != last_post:
-                api.wall.createComment(owner_id='-%i' % group, post_id=last_post, message=random.choice(comments))
+                api.wall.createComment(owner_id='-%s' % group, post_id=last_post, message=random.choice(comments))
                 print('https://vk.com/wall-%s_%s - Есть комментарий' % (group, last_post))
             post = last_post
             time.sleep(0.7)
