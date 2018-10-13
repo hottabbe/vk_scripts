@@ -1,7 +1,7 @@
 # vkscripts
 # Fcomment
 # Оставляет "первонахи" в любом паблике
-# 0.21
+# 0.215
 ###
 
 import vk
@@ -19,7 +19,7 @@ threads = []
 def idle(group):
     isClear = False
     try:
-        post = api.wall.get(owner_id='-%i' % group, count=1)['items'][0]['id']
+        post = api.wall.get(owner_id='-%s' % group, count=1)['items'][0]['id']
     except IndexError:
         if not isClear:
             print('Стена пустая,жду постов...')
