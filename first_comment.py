@@ -11,7 +11,7 @@ import time
 import os
 import threading
 
-group_id = ''
+group_id = []
 comments = []
 threads = []
 
