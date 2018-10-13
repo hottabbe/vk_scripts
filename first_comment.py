@@ -1,7 +1,7 @@
 # vkscripts
 # Fcomment
 # Оставляет "первонахи" в любом паблике
-# 0.2
+# 0.21
 ###
 
 import vk
@@ -81,7 +81,7 @@ else:
         if len(text) == 0:
             with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'r',
                       encoding='utf-8') as file:
-                new = file.read().replace('group_id = []', 'group_id = %s' % str(groups))
+                new = file.read().replace("group_id = []", "group_id = %s" % str(groups))
             with open('%s/first_comment.py' % os.path.dirname(os.path.abspath(__file__)), 'w',
                       encoding='utf-8') as file:
                 file.write(new)
